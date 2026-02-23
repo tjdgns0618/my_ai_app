@@ -4,3 +4,4 @@ markitdown
 python-dotenv
 dotenv
 markitdown[all]
+Pillow
