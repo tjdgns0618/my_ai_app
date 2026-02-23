@@ -3,4 +3,4 @@ langchain-google-genai
 markitdown
 python-dotenv
 dotenv
-MarkItDown
+markitdown[all]
