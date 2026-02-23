@@ -56,7 +56,21 @@ st.title("📂 스마트 문서 & 이미지 분석기")
 # 2. 사이드바 설정
 with st.sidebar:
     st.header("⚙️ 설정")
-    google_api_key = st.text_input("Gemini API Key 입력", type="password")
+
+# API 키 생성 방법 설명 (툴팁 가이드)
+    api_guide = """
+    **Gemini API 키 발급 방법:**
+    1. [Google AI Studio](https://aistudio.google.com/app/apikey)에 접속합니다.
+    2. 'Create API key' 버튼을 클릭합니다.
+    3. 생성된 키를 복사하여 아래 칸에 붙여넣으세요.
+    """
+    
+    # help 파라미터를 사용해 물음표 아이콘(?) 생성
+    google_api_key = st.text_input(
+        "Gemini API Key 입력", 
+        type="password",
+        help=api_guide  # 이 부분이 물음표 아이콘과 설명을 만듭니다.
+    )
     uploaded_file = st.file_uploader("파일 업로드", type=['pdf', 'png', 'jpg', 'jpeg', 'docx', 'xlsx', 'txt'])
     
     st.warning("⚠️ **HWP 파일 안내**\n\n한글(HWP) 파일은 직접 미리보기가 어렵습니다. 분석을 위해 반드시 **PDF로 변환 후** 업로드해 주세요.")
@@ -114,7 +128,7 @@ if uploaded_file and google_api_key:
             if user_question:
                 with st.spinner("Gemini가 생각 중..."):
                     llm = ChatGoogleGenerativeAI(
-                        model="gemini-3-flash-preview", # 안정적인 분석을 위해 1.5 flash 권장
+                        model="gemini-2.5-flash", # 안정적인 분석을 위해 1.5 flash 권장
                         google_api_key=google_api_key,
                         temperature=0
                     )
@@ -133,6 +147,11 @@ if uploaded_file and google_api_key:
                     answer = response.content if hasattr(response, 'content') else str(response)
                     st.write("---")
                     st.markdown("### 📢 AI 답변")
+
+                    if isinstance(answer, list) and len(answer) > 0:
+                        if isinstance(answer[0], dict) and 'text' in answer[0]:
+                            answer = answer[0]['text']
+
                     st.success(answer)
 
         except Exception as e:
