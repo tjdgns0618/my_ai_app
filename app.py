@@ -48,7 +48,7 @@ if uploaded_file and google_api_key:
         if user_question:
             with st.spinner("Gemini가 분석 중..."):
                 llm = ChatGoogleGenerativeAI(
-                    model="gemini-1.5-flash", # 이미지 분석에 탁월한 모델
+                    model="gemini-3-flash-preview", # 이미지 분석에 탁월한 모델
                     google_api_key=google_api_key
                 )
                 
